@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+        <title>Geonames user Interface</title>
+        <script src="js/jquery.js"></script>
+        <script src="js/script.js"></script>
+    </head>
+    <body>
+        <div>
+            <div class="header">
+                <h3>GeoNames User Interface</h3>
+                <p>by John Zvorwadza</p>
+            </div>
+
+            
+
+            <div class="selectorContainer">
+                <div>Neighboring Countries</div>
+                <select id="countryNC">
+                    <option value="GB">UnitedKingdom</option>
+                    <option value="USA">USA</option>
+                    <option value="ZW">Zimbabwe</option>
+                </select>
+                <button id="checkNeighboringCountries">Check</button>
+            </div>
+
+            <hr/>
+
+            <div class="selectorContainer">
+                <div>Time Zone</div>
+                <div>
+                    <input id="ln" type="text" placeholder="longtude"/>
+                    <input id="lt" type="text" placeholder="lattude"/>
+                </div>
+                <button id="checkTimeZone">Check</button>
+            </div>
+
+            <hr/>
+
+            <div class="selectorContainer">
+                <div>Capital City</div>
+                <select id="countryCC">
+                    <option value="GB">UnitedKingdom</option>
+                    <option value="USA">USA</option>
+                    <option value="ZW">Zimbabwe</option>
+                </select>
+                <button id="checkCapitalCity">Check</button>
+            </div>
+
+            <hr/>
+
+
+
+            <div>
+                <h1 id="type"></h1>
+                <div id="results">
+                    <span>capital</span>
+                    <span>London</span>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
