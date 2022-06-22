@@ -1,7 +1,7 @@
 <?php
 
 $base_url = "http://api.geonames.org/";
-$base_query = "?username=flightltd";
+$base_query = "?username=johnzvoradza";
 $url = null;
 
 
