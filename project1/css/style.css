@@ -67,6 +67,9 @@ margin-top: 10px;
 }
 
 .nav{
+position: sticky;
+position: -webkit-sticky;
+top:0;
 background-color: white;
 height: 59px;
 display: flex;
