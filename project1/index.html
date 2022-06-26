@@ -20,17 +20,18 @@
         <div id="loading">
             <img src="https://cdn.dribbble.com/users/121337/screenshots/1024835/loading2.gif"/>
         </div>
+        <div class="nav">
+            <span>Gazzeetter</span>
+            <select id="country"></select>
+            <button id="info"></button>
+            <button id="weatherbtn"></button>
+            <button id="newsbtn"></button>
+        </div>
+
         <div class="main">
-            <div class="nav">
-                <span>Gazzeetter</span>
-                <select id="country"></select>
-                <button id="info"></button>
-                <button id="weatherbtn"></button>
-                <button id="newsbtn"></button>
-            </div>
             <div id="leafletmap"></div>
             
-        </div>
+
         <div id="results">
             <h1 class="countryName"></h1>
             <div>
@@ -100,6 +101,10 @@
             </div>
 
         </div>
+
+        </div>
+           
+        
         <script src="js/jquery.js"></script>
         <script src="js/script.js"></script>
         <script src="dist/leaflet.markercluster.js"></script>
