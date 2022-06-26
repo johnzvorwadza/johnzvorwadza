@@ -87,16 +87,16 @@ background-size: cover;
 border: 0;
 }
 #info{
-background: url("src/info.png");
+background: url("../src/info.png");
 background-size: cover;
 }
 #weatherbtn{
-background: url("src/weather.png");
+background: url("../src/weather.png");
 background-size: cover;
 }
 
 #newsbtn{
-background: url("src/news.png");
+background: url("../src/news.png");
 background-size: cover;
 }
 
