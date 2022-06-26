@@ -1,0 +1,106 @@
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+
+        <link type="text/css" rel="stylesheet" href="dist/MarkerCluster.Default.css">
+        <link type="text/css" rel="stylesheet" href="dist/MarkerCluster.css">
+       
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+        
+        <title>Gazzeetter</title>
+    </head>
+    <body>
+        <div id="loading">
+            <img src="https://cdn.dribbble.com/users/121337/screenshots/1024835/loading2.gif"/>
+        </div>
+        <div class="main">
+            <div class="nav">
+                <span>Gazzeetter</span>
+                <select id="country"></select>
+                <button id="info"></button>
+                <button id="weatherbtn"></button>
+                <button id="newsbtn"></button>
+            </div>
+            <div id="leafletmap"></div>
+            
+        </div>
+        <div id="results">
+            <h1 class="countryName"></h1>
+            <div>
+                <span>Capital City</span>
+                <span id="capital"></span>
+            </div>
+
+            <div>
+                <span>Population</span>
+                <span id="population"></span>
+            </div>
+
+            <div>
+                <span>Currency</span>
+                <span id="currencyCode"></span>
+            </div>
+
+            <div>
+                <span>Continent</span>
+                <span id="continentName"></span>
+            </div>
+            <img id="flag" src=""/>
+
+        </div>
+
+
+        <div id="weather">
+            <h5>Weather</h5>
+            <div>
+                <span>Current Weather</span>
+                <span id="currentWeather"></span>
+            </div>
+
+            <div>
+                <span>Temperature</span>
+                <span id="temperature"></span>
+            </div>
+
+            <div>
+                <span>High Temperature</span>
+                <span id="highTemperature"></span>
+            </div>
+
+            <div>
+                <span>Low Temperature</span>
+                <span id="lowTemperature"></span>
+            </div>
+
+            <div>
+                <span>Wind Speed</span>
+                <span id="windSpeed"></span>
+            </div>
+
+            <div>
+                <span>Humidity</span>
+                <span id="humidity"></span>
+            </div>
+
+        </div>
+
+        <div class="newsCont">
+            <h3>Top News In <span class="countryName"></span></h3>
+            <div id="news">
+
+                
+
+            </div>
+
+        </div>
+        <script src="js/jquery.js"></script>
+        <script src="js/script.js"></script>
+        <script src="dist/leaflet.markercluster.js"></script>
+    </body>
+</html>
