@@ -1,9 +1,12 @@
+var pageLoaded = false;
 
 var map = L.map("leafletmap").setView([54.560886, -2.2125118], 6);
 L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=0HLZZcuxYLMWKHWYKuKc', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
 }).addTo(map);
 
+
+const localMarkers = [];
 
 
 function setMarkers(countryObj){
@@ -34,8 +37,89 @@ map.addLayer(earthquakesMarkers);
 const regions = countryObj.regions;
 const regionsMarkers = L.markerClusterGroup();
 regions.forEach(element=>{
-    L.marker([element.lat, element.lng]).addTo(regionsMarkers).bindPopup(`
-<div><h3>${element.toponymName}</h3>population : ${element.population}</div>`);
+    var popUpDetails = document.createElement("div");
+    popUpDetails.className = "markerPopup";
+    var h3 = document.createElement("h3");
+    h3.append(element.toponymName);
+    popUpDetails.append(h3);
+    var population = document.createElement("p");
+    population.append(`population : ${numeral(element.population).format()}`)
+    popUpDetails.append(population);
+    L.marker([element.lat, element.lng]).addTo(regionsMarkers).bindPopup(popUpDetails).on("click", ()=>{
+
+        var markerLoading = document.createElement("img");
+        markerLoading.setAttribute("src","src/loading.gif");
+        markerLoading.className = "loading";
+
+        popUpDetails.appendChild(markerLoading)
+
+        if(localMarkers.filter(lm=> lm === element.geonameId).length > 0){
+            popUpDetails.removeChild(markerLoading);
+        }else{
+            $.ajax({
+                url:"php/getLocalData.php"
+                ,type:"GET"
+                ,dataType:"json"
+                ,data:{
+                    lat:element.lat
+                    ,lon:element.lng
+                    
+
+                }
+                ,success: weatherObj=>{
+
+                    
+                    popUpDetails.removeChild(markerLoading);
+
+                    //set weather:::
+                    var markerWeather = document.createElement("div");
+                    markerWeather.innerHTML = `<h5>Current Weather</h5>
+            <div>
+                
+                <span>${weatherObj.weather[0].description}</span>
+                <span><img src="http://openweathermap.org/img/wn/${weatherObj.weather[0].icon}.png"/></span>
+            </div>
+
+            <div>
+                <span>Temp</span>
+                <span>${Math.floor(weatherObj.main.temp - 273.15)}&deg;</span>
+            </div>
+
+            <div>
+                <span>High Temp</span>
+                <span>${Math.floor(weatherObj.main.temp_max - 273.15)}&deg;</span>
+            </div>
+
+            <div>
+                <span>Low Temp</span>
+                <span>${Math.floor(weatherObj.main.temp_min - 273.15)}&deg;</span>
+            </div>
+
+            <div>
+                <span>Wind Speed</span>
+                <span>${weatherObj.wind.speed}</span>
+            </div>
+
+            <div>
+                <span>Humidity</span>
+                <span>${weatherObj.main.humidity}</span>
+            </div>`;
+
+
+
+
+                    popUpDetails.appendChild(markerWeather);
+                    localMarkers.push(element.geonameId);
+
+                }
+                ,error: (error, status, errorType)=>{
+                    popUpDetails.removeChild(markerLoading);
+                    alert(errorType);
+                }
+            })
+        }
+    
+});
 
 })
 map.addLayer(regionsMarkers);
@@ -67,33 +151,26 @@ function loadCountries(ln, lt){
         }
         ,error: function(err , status, errorType){
         
-            alert("Sorry, there was an error making your request.");
+            alert("Sorry, there was an error making your request. \n"+errorType);
         }
     });
 }
 
 function changeCountry(){
-    $("#news").html("");
-    $("#results").slideUp(200);
-    $("#weather").slideUp(200);
-    $(".newsCont").slideUp(200);
     $("#loading").fadeIn(100);
-    
-    var value = $("#country").val();
-
     $.ajax({
         url:"php/getdata.php"
         ,type:"GET"
         ,dataType:"json"
         ,data:{
-            country: value
+            country: $("#country").val()
             ,type: 'capital'
         }
         ,success: function(result){
             //set basic details
             $(".countryName").html(result['geonames'][0].countryName);
             $("#capital").html(result['geonames'][0].capital);
-            $("#population").html(result['geonames'][0].population);
+            $("#population").html(numeral(result['geonames'][0].population).format());
             $("#continentName").html(result['geonames'][0].continentName);
             $("#currencyCode").html(result['geonames'][0].currencyCode);
             $("#flag").attr("src",`https://countryflagsapi.com/png/${result['geonames'][0].countryName}`);
@@ -110,6 +187,7 @@ function changeCountry(){
 
             //set news
             var news = result['geonames'][0].news;
+            $("#news").html("");
             news.forEach(element=>{
                 let newsImg = ""
                 if(element.image !== null && element.image !== undefined){
@@ -117,31 +195,31 @@ function changeCountry(){
                 }
                 
                 $("#news").append(`<div class="newsItem">
+                <h3>${element.title}</h3>
                 ${newsImg}
-                <h5>${element.title}</h5>
-                <p>${element.description}
-                <a target="_blank" href="${element.url}">Full Story</a></p>
-            </div>`);
+                <p>${element.description}</p>
+                <a class="btn btn-info btn-lg"  target="_blank" href="${element.url}">Full Story</a>
+            </div><hr/>`);
             });
            
 
             //set Markers
             setMarkers(result['geonames'][0]);
+            pageLoaded = true;
 
-            $("#results").slideUp(200);
-            $("#weather").slideUp(200);
-            $(".newsCont").slideUp(200);
             $("#loading").fadeOut(1000);
 
         }
         ,error: function(err , status, errorType){
-            $("#results").slideUp(200);
-            $("#weather").slideUp(200);
-            $(".newsCont").slideUp(200);
-            $("#loading").fadeOut(1000);
-            alert("Sorry, there was an error making your request.");
+            alert("Sorry, there was an error making your request. \n"+errorType);
+            console.log(JSON.stringify(err));
+            if(pageLoaded === true){
+                $("#loading").fadeOut(1000);
+            }
+
         }
-    })
+    });
+
 
 }
 
@@ -158,23 +236,6 @@ $(document).ready(()=>{
         loadCountries( 51.509865 , -0.118092);
     }
 
-    
-
-    $("#info").on("click", ()=>{
-        $(".newsCont").slideUp(50);
-        $("#results").slideToggle(200);
-    });
-
-    $("#weatherbtn").on("click", ()=>{
-        $(".newsCont").slideUp(50);
-        $("#weather").slideToggle(200);
-    });
-
-    $("#newsbtn").on("click", ()=>{
-        $("#results").slideUp(50);
-        $("#weather").slideUp(50);
-        $(".newsCont").slideToggle(200);
-    });
 
     $("#country").on("change", ()=>{
         changeCountry();
@@ -183,5 +244,3 @@ $(document).ready(()=>{
 
 
 });
-
-

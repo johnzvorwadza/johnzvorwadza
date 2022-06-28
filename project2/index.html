@@ -1,0 +1,350 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+        <style>
+            *{
+    position: relative;
+}
+body, html{
+    padding:0;
+    margin:0;
+    line-height: 25px;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    color: white;
+
+}
+
+
+
+.nav{
+position: sticky;
+position: -webkit-sticky;
+top:0;
+height: 59px;
+display: flex;
+align-items: center;
+gap: 10px;
+background-color: rgba(9,9,121,1);
+color: white;
+padding: 5px;
+border-bottom: 1px solid #333;
+z-index: 9;
+
+}
+.nav button{
+    font-size: 12px;
+    line-height: 25px;
+    border-radius: 10px;
+}
+.nav button:hover{
+    line-height: 23px;
+    background-color: #000;
+    color: white;
+    border: 1px solid white;
+}
+.main{
+    margin-top: 60px;
+
+}
+
+.row{
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    background-color: white;
+    color: #333;
+    padding: 10px;
+    width: calc(100% - 22px);
+}
+
+.titleRow{
+    font-weight: bold;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 59px;
+    background: rgb(2,0,36);
+    color: white;
+    z-index: 2;
+}
+
+
+
+
+.overlay{
+    position: fixed;
+    top:0;
+    left:0;
+    height: 100vh;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,212,255,0.25);
+    z-index:9;
+}
+
+.overlay div{
+    width:min(300px, calc(100% -20px));
+    background-color: rgb(2,0,36);
+    color:white;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+
+}
+.overlay div h5{
+    margin: 0;
+    padding: 0;
+}
+
+.closeBtn{
+    position: absolute; 
+    top: 5px;
+    right: 5px;
+    border-radius: 10px;
+    background-color: rgb(109, 7, 7);
+    color: white;
+    font-weight: bold;
+    border: 0;
+    padding: 5px;
+    
+}
+.closeBtn:hover{
+    background: red;
+}
+
+
+.filter{
+    font-weight: bold;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 59px;
+    background: rgb(2,0,36);
+    color: white;
+    z-index: 2;
+}
+.filter div{
+padding: 10px;
+display: flex;
+justify-content: space-evenly;
+}
+.filter input{
+    margin: 10px;
+    width: calc(100% - 20px);
+}
+
+
+        </style>
+        <title>Company Directory</title>
+    </head>
+    <body>
+        
+        <div class="nav">
+            <span>Company Directory</span>
+            <button id="openAddEmployee">Add New Employee</button>
+            <button id="openAddDepartment">Add New Department</button>
+            <button id="openAddLocation">Add New Branch</button>
+        </div>
+
+        <div class="main">
+
+            
+            <div class="titleRow filter"> 
+                <input id="search" type="text" placeholder="search"/>
+                <div>
+                    <select id="department">
+                        <option value="">All Department</option>
+                    </select>
+
+                    <select id="location">
+                        <option value="">All Locations</option>
+                        <option value="2">Location 2</option>
+                        <option value="3">Location 3</option>
+                    </select>
+                </div>
+
+            </div>
+            <div id="results"></div>
+
+        </div>
+
+        <div class="overlay">
+            <div id="addEmployee">
+                <h5>Add New Employee</h5>
+                <input type="text" placeholder="First Name"/>
+                <input type="text" placeholder="Last Name"/>
+                <input type="text" placeholder="Role"/>
+                <select>
+                    <option disabled="true" selected="true" value="">Select Department</option>
+                    <option>Customer Service</option>
+                    <option>Sales</option>
+                    <option>Admin</option>
+                </select>
+                <select>
+                    <option disabled="true" selected="true" value="">Select Location</option>
+                    <option>London</option>
+                    <option>Paris</option>
+                    <option>Harare</option>
+                </select>
+                <button>submit</button>
+                <button id="closeAddEmployee" class="closeBtn">close</button>
+            </div>
+
+
+            <div id="addLocation">
+                <h5>Add New Location</h5>
+                <input type="text" placeholder="Name"/>
+                <button>submit</button>
+                <button id="closeAddLocation" class="closeBtn">close</button>
+            </div>
+
+
+            <div id="addDepartment">
+                <h5>Add New Department</h5>
+                <input type="text" placeholder="Name"/>
+                <button>submit</button>
+                <button id="closeAddDepartment" class="closeBtn">close</button>
+            </div>
+
+
+
+
+        </div>
+           
+        
+        <script src="js/jquery.js"></script>
+        <script src="js/script.js"></script>
+        <script>
+
+                $(document).ready(()=>{
+
+
+    $("#addDepartment").fadeOut(0);               
+    $("#addLocation").fadeOut(0);               
+    $("#addEmployee").fadeOut(0);
+    $(".overlay").hide();
+    
+
+$("#closeAddEmployee").on("click", ()=>{
+    $("#addEmployee").fadeOut();
+    $(".overlay").hide();
+});
+
+$("#closeAddLocation").on("click", ()=>{
+    $("#addLocation").fadeOut();
+    $(".overlay").hide();
+});
+
+$("#closeAddDepartment").on("click", ()=>{
+    $("#addDepartment").fadeOut();
+    $(".overlay").hide();
+});
+
+$("#openAddEmployee").on("click", ()=>{
+    $("#addDepartment").fadeOut(0);               
+    $("#addLocation").fadeOut(0);  
+    $(".overlay").show();
+    $("#addEmployee").fadeIn();
+});
+
+
+$("#openAddLocation").on("click", ()=>{
+    $("#addEmployee").fadeOut(0);
+    $("#addDepartment").fadeOut(0);  
+    $(".overlay").show();             
+    $("#addLocation").fadeIn();  
+});
+
+$("#openAddDepartment").on("click", ()=>{
+    $("#addEmployee").fadeOut(0);             
+    $("#addLocation").fadeOut(); 
+    $(".overlay").show(); 
+    $("#addDepartment").fadeIn();  
+});
+
+
+const data = {people:[],locations:[]};
+
+let people = [];
+const setPeople=()=>{
+    $("#results").html("");
+
+
+    let peopleToShow = people;
+    if($("#location").val() !== ""){
+        peopleToShow = peopleToShow.filter(person=> person[5] == $("#location").val());
+    }
+
+    peopleToShow.forEach(person=>{
+        $("#results").append(`
+        <div class="row">
+            <div><h3>${person[1]} ${person[2]}</h3></div>
+            <div><b>Email:</b> ${person[4]}</div>
+            <div><b>Location:</b> Location ${person[5]}</div>
+        </div>`);
+
+
+
+});
+
+ 
+
+    
+    
+}
+
+$.ajax({
+    url: "php/loaddata.php"
+    ,type: "GET"
+    ,dataType: "json"
+    ,success: (results)=>{
+        data.people = results.data[0];
+        data.departments = results.data[1];
+        data.locations = results.data[2];
+
+        people = data.people;
+        setPeople();
+        
+    }
+    ,error: (err, status, type)=>{
+        alert("error");
+
+    }
+});
+
+
+$("#search").on("keyup",()=>{
+
+    var searchList = data.people.filter(person=> 
+    person[1].toLowerCase().includes($("#search").val().toLowerCase()) 
+    || person[2].toLowerCase().includes($("#search").val().toLowerCase()));
+    people = searchList;
+    setPeople();
+
+});
+
+$("#location").on("change", ()=>{
+    setPeople(); 
+});
+
+$("#department").on("change", ()=>{
+    setPeople(); 
+});
+
+
+});
+            
+        </script>
+    </body>
+</html>
