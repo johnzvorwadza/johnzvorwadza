@@ -24,13 +24,7 @@ function getRegions($base_url, $base_query,$geonames_id){
 $regionData = file_get_contents($base_url. "childrenJSON". $base_query. "&geonameId=".$geonames_id);
 $region= json_decode($regionData);
 foreach($region->geonames as $element){
-
-$regionInnerData = file_get_contents($base_url. "childrenJSON". $base_query. "&geonameId=".$element->geonameId);
-$regionInner= json_decode($regionInnerData);
-foreach($regionInner->geonames as $element2){
-	array_push($dataToReturn, $element2);
-}
-
+	array_push($dataToReturn, $element);
 }
 
 return $dataToReturn;
@@ -68,13 +62,62 @@ $weather= json_decode($weatherquakesData);
 $decodedData->geonames[$key]->weather = $weather;
 
 //set news array
-$newsData = file_get_contents("http://api.mediastack.com/v1/news?languages=en&access_key=21e379dca2df76ed9cc6ff11e9bb7045&countries=".$country->countryCode);
+$newsData = file_get_contents("http://api.mediastack.com/v1/news?languages=en&access_key=65f4055d37dcc6c698bd9bc4549ef0b3&countries=".$country->countryCode);
 $news= json_decode($newsData);
 $decodedData->geonames[$key]->news = $news->data;
 
 //set Regions
 $regions = getRegions($base_url, $base_query, $country->geonameId);
 $decodedData->geonames[$key]->regions = $regions;
+
+//set covid array
+//$covidData = file_get_contents("https://covid19-api.weedmark.systems/api/v1/total?country=".$country->countryCode);
+//$covid= json_decode($covidData);
+//$decodedData->geonames[$key]->covid = $covid->data;
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+	CURLOPT_URL => "https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/total?country=". urlencode($country->countryName),
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_ENCODING => "",
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 30,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => "GET",
+	CURLOPT_HTTPHEADER => [
+		"X-RapidAPI-Host: covid-19-coronavirus-statistics.p.rapidapi.com",
+		"X-RapidAPI-Key: 262b7e6211msh361bcb2a7deec67p146520jsnce86027c9728"
+	],
+]);
+
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+$covidData = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+
+	
+
+} else {
+	$covid= json_decode($covidData);
+	$decodedData->geonames[$key]->covid = $covid->data;
+
+	
+	
+}
+
+
+
+//set National Holidays array
+$holidaysData = file_get_contents("https://calendarific.com/api/v2/holidays?&api_key=c80912bd5b90856bc68a709d28909d053a264f1a&year=2022&country=".$country->countryCode);
+$holidays= json_decode($holidaysData);
+$decodedData->geonames[$key]->holidays = $holidays->response->holidays;
+
 
   }
 

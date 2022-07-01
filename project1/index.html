@@ -1,13 +1,19 @@
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link type="text/css" rel="stylesheet" href="dist/MarkerCluster.Default.css">
-        <link type="text/css" rel="stylesheet" href="dist/MarkerCluster.css">
-
-        <link rel="stylesheet" href="leaflet/leaflet.css" />
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-
-        <link rel="stylesheet" href="bootstrap-4.0.0/css/bootstrap.min.css">
+      <title>Gazetter</title>
+      <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+      <link rel="manifest" href="favicon_io/site.webmanifest">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link type="text/css" rel="stylesheet" href="dist/MarkerCluster.Default.css">
+      <link type="text/css" rel="stylesheet" href="dist/MarkerCluster.css">
+      <link rel="stylesheet" href="leaflet/leaflet.css" />
+      <link rel="stylesheet" href="bootstrap-4.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+      <link href="fontawesome/css/all.css" rel="stylesheet">
+      <link rel="stylesheet" href="css/easybutton.css">
+      <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
         <div id="loading">
@@ -15,18 +21,6 @@
         </div>
         <div class="header">
             <select  class="select" id="country"></select>
-            <button 
-            type="button"
-            class="btn btn-info btn-lg" 
-            data-toggle="modal" 
-            data-target="#infoModal">info</button>
-
-            <button 
-            type="button"
-            class="btn btn-info btn-lg" 
-            data-toggle="modal" 
-            data-target="#newsModal">news</button>
-          
           </div>
 
           <div id="leafletmap"></div>
@@ -94,16 +88,111 @@
             </div>
           </div>
 
+
+          <div class="modal fade" id="covidModal" role="dialog">
+            <div class="modal-dialog">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Covid Statistics In <span class="countryName"></span></h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <div class="flex-space-between">
+                    <span>Confirmed Cases</span>
+                    <span id="Cases_text"></span>
+                  </div>
+                  <hr/>
+                  <div class="flex-space-between">
+                    <span>Deaths</span>
+                    <span id="Deaths_text"></span>
+                  </div>
+                  <p id="covid"></p>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="modal fade" id="holidaysModal" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Holidays In <span class="countryName"></span></h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                  <div id="holidays"></div>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="modal fade " id="weatherModal" role="dialog">
+            <div class="modal-dialog">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">weather</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  
+                  <div class="main">
+                    <img class="weatherIcon" src=""/>
+                    <div class="temp">
+                      <div id="temperature"></div>
+                      <div class="highlowTemp">
+                        <div id="lowTemperature"></div>
+                        <div  id="highTemperature"></div>
+                      </div>
+
+                    </div>
+                    
+                  </div>
+                  
+                  <div id="currentWeather"></div>
+                  
+
+                </div>
+                <div class="modal-footer">
+                  <div>
+                    <img style="width:50px" src="https://www.pngitem.com/pimgs/m/95-950144_wind-speed-weather-forecasting-clip-art-wind-icon.png"/>
+                    <span id="windSpeed"></span>
+                  </div>
+
+                  <div>
+                    <img style="width:50px" src="https://cdn4.iconfinder.com/data/icons/weather-conditions/512/medium_rain-512.png"/>
+                    <span id="humidity"></span>
+                  </div>
+
+
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
 <script src="leaflet/leaflet.js"></script>
 <script src="js/jquery.js"></script>
-<script src="js/script.js"></script>
 <script src="dist/leaflet.markercluster.js"></script>
+<script src="js/leaflet.extra-markers.min.js"></script>
+<script src="js/easybutton.js"></script>
 <script src="js/numeral.min.js"></script>
-
-
 <script src="js/popper.js"></script>
-
 <script src="bootstrap-4.0.0/js/bootstrap.min.js"></script>
-
+<script src="js/script.js"></script>
     </body>
 </html>

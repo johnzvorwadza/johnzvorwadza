@@ -20,16 +20,36 @@ function setMarkers(countryObj){
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
 }).addTo(map);
 
+
 var borderMarker = L.geoJSON(geometry).addTo(map);
+borderMarker.setStyle({
+    color:"yellow"
+});
 map.setView([capitalCity.lat, capitalCity.lng], 6);
 map.fitBounds(borderMarker.getBounds(), 8);
 
 
+var capitalCityMarkerIcon = L.ExtraMarkers.icon({
+    icon: 'fa-burst',
+    iconColor: "red",
+    shape: 'square',
+    prefix: 'fa'
+  });
+
+
+
+var earthquakesMarkerIcon = L.ExtraMarkers.icon({
+    icon: 'fa-burst',
+    iconColor: "red",
+    shape: 'square',
+    prefix: 'fa'
+  });
+
+
 const earthquakesMarkers = L.markerClusterGroup();
 earthquakes.forEach(eq =>{
-    eqCircleMarker = L.circleMarker([eq.lat, eq.lng],{
-        color:'red'
-        ,title: eq.datetime
+    eqmarker = L.marker([eq.lat, eq.lng],{
+        icon:earthquakesMarkerIcon
     }).addTo(earthquakesMarkers).bindPopup(`<div><h3>Earthquake</h3>magnitude :${eq.magnitude}<hr/>datetime: ${eq.datetime}</div>`);  
 });
 map.addLayer(earthquakesMarkers);
@@ -45,7 +65,19 @@ regions.forEach(element=>{
     var population = document.createElement("p");
     population.append(`population : ${numeral(element.population).format()}`)
     popUpDetails.append(population);
-    L.marker([element.lat, element.lng]).addTo(regionsMarkers).bindPopup(popUpDetails).on("click", ()=>{
+
+
+    var locationMarkerIcon = L.ExtraMarkers.icon({
+        icon: 'fa-location-dot',
+        iconColor: "#333",
+        shape: 'square',
+        prefix: 'fa'
+      });
+    
+
+
+
+    L.marker([element.lat, element.lng], {icon: locationMarkerIcon}).addTo(regionsMarkers).bindPopup(popUpDetails).on("click", ()=>{
 
         var markerLoading = document.createElement("img");
         markerLoading.setAttribute("src","src/loading.gif");
@@ -177,13 +209,17 @@ function changeCountry(){
 
             //set weather details
             const weatherObj = result['geonames'][0].weather;
-            $("#currentWeather").html(weatherObj.weather[0].main+" / "+weatherObj.weather[0].description);
+            $("#currentWeather").html(weatherObj.weather[0].description);
             $("#temperature").html(Math.floor(weatherObj.main.temp - 273.15) +"&deg;");
             $("#highTemperature").html(Math.floor(weatherObj.main.temp_max - 273.15)+"&deg;");
             $("#lowTemperature").html(Math.floor(weatherObj.main.temp_min - 273.15)+"&deg;");
-            $("#windSpeed").html(weatherObj.wind.speed);
-            $("#humidity").html(weatherObj.main.humidity);
+            $("#windSpeed").html(weatherObj.wind.speed+ "mph");
+            $("#humidity").html(weatherObj.main.humidity+ "%");
 
+            
+            $(".weatherIcon").attr("src",`http://openweathermap.org/img/wn/${weatherObj.weather[0].icon}@2x.png`);
+
+            
 
             //set news
             var news = result['geonames'][0].news;
@@ -201,6 +237,36 @@ function changeCountry(){
                 <a class="btn btn-info btn-lg"  target="_blank" href="${element.url}">Full Story</a>
             </div><hr/>`);
             });
+
+
+            //set National Holidays
+            var holidays = result['geonames'][0].holidays;
+            $("#holidays").html("");
+            holidays.forEach(element=>{
+                $("#holidays").append(`
+                <div>
+                <h3>${element.name}</h3>
+                <span>${element.date.iso}</span>
+                <p>${element.description}</p>
+
+                </div>
+                <hr/>
+                
+                `);
+            });
+
+
+
+
+            //Set Covid data
+            var covid = result['geonames'][0].covid;
+            if(covid !== undefined && covid !== null){
+                //$("#covid").html(JSON.stringify(covid));
+                $("#Cases_text").html(numeral(covid.confirmed).format());
+                $("#Deaths_text").html(numeral(covid.deaths).format());
+            }
+            
+
            
 
             //set Markers
@@ -224,6 +290,28 @@ function changeCountry(){
 }
 
 
+L.easyButton('<i class="fa fa-circle-info"></i>', function(btn, map){
+    $("#infoModal").modal();
+  }).addTo(map);
+  
+  L.easyButton('<i class="fa fa-newspaper"></i>', function(btn, map){
+    $("#newsModal").modal();
+  }).addTo(map);
+  
+  L.easyButton('<i class="fa fa-bacteria"></i>', function(btn, map){
+    $("#covidModal").modal();
+  }).addTo(map);
+  
+  L.easyButton('<i class="fa fa-calendar"></i>', function(btn, map){
+    $("#holidaysModal").modal();
+  }).addTo(map);
+  
+  L.easyButton('<i class="fa fa-sun"></i>', function(btn, map){
+    $("#weatherModal").modal();
+  }).addTo(map);
+  
+
+
 
 $(document).ready(()=>{
     if(navigator.geolocation){
@@ -240,6 +328,7 @@ $(document).ready(()=>{
     $("#country").on("change", ()=>{
         changeCountry();
     });
+
     
 
 
