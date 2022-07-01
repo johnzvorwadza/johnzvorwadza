@@ -1,6 +1,6 @@
 <html>
     <head>
-      <title>Gazetter</title>
+      <title>Gazetteer</title>
       <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
       <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
       <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
@@ -61,8 +61,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                </div>
               </div>
               
             </div>
@@ -80,8 +78,6 @@
                 </div>
                 <div class="modal-body">
                     <div id="news"></div>
-                </div>
-                <div class="modal-footer">
                 </div>
               </div>
               
@@ -111,8 +107,6 @@
                   <p id="covid"></p>
 
                 </div>
-                <div class="modal-footer">
-                </div>
               </div>
               
             </div>
@@ -131,8 +125,6 @@
 
                   <div id="holidays"></div>
 
-                </div>
-                <div class="modal-footer">
                 </div>
               </div>
               
@@ -164,20 +156,19 @@
                   </div>
                   
                   <div id="currentWeather"></div>
+
+                  <div class="flex-space-between">
+                    <div>
+                      <img style="width:50px" src="https://www.pngitem.com/pimgs/m/95-950144_wind-speed-weather-forecasting-clip-art-wind-icon.png"/>
+                      <span id="windSpeed"></span>
+                    </div>
+  
+                    <div>
+                      <img style="width:50px" src="https://cdn4.iconfinder.com/data/icons/weather-conditions/512/medium_rain-512.png"/>
+                      <span id="humidity"></span>
+                    </div>
+                  </div>
                   
-
-                </div>
-                <div class="modal-footer">
-                  <div>
-                    <img style="width:50px" src="https://www.pngitem.com/pimgs/m/95-950144_wind-speed-weather-forecasting-clip-art-wind-icon.png"/>
-                    <span id="windSpeed"></span>
-                  </div>
-
-                  <div>
-                    <img style="width:50px" src="https://cdn4.iconfinder.com/data/icons/weather-conditions/512/medium_rain-512.png"/>
-                    <span id="humidity"></span>
-                  </div>
-
 
                 </div>
               </div>
@@ -193,6 +184,7 @@
 <script src="js/numeral.min.js"></script>
 <script src="js/popper.js"></script>
 <script src="bootstrap-4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/build/date-en-ZW.js"></script>
 <script src="js/script.js"></script>
     </body>
 </html>

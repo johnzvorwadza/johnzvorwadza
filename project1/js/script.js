@@ -50,7 +50,7 @@ const earthquakesMarkers = L.markerClusterGroup();
 earthquakes.forEach(eq =>{
     eqmarker = L.marker([eq.lat, eq.lng],{
         icon:earthquakesMarkerIcon
-    }).addTo(earthquakesMarkers).bindPopup(`<div><h3>Earthquake</h3>magnitude :${eq.magnitude}<hr/>datetime: ${eq.datetime}</div>`);  
+    }).addTo(earthquakesMarkers).bindPopup(`<div><h3>Earthquake</h3>magnitude :${eq.magnitude}<hr/>${Date.parse(eq.datetime).toString("dS MMM yyyy")}</div>`);  
 });
 map.addLayer(earthquakesMarkers);
 
@@ -68,7 +68,7 @@ regions.forEach(element=>{
 
 
     var locationMarkerIcon = L.ExtraMarkers.icon({
-        icon: 'fa-location-dot',
+        icon: 'fa-city',
         iconColor: "#333",
         shape: 'square',
         prefix: 'fa'
@@ -246,7 +246,7 @@ function changeCountry(){
                 $("#holidays").append(`
                 <div>
                 <h3>${element.name}</h3>
-                <span>${element.date.iso}</span>
+                <span>${Date.parse(element.date.iso).toString("dS MMM")}</span>
                 <p>${element.description}</p>
 
                 </div>
