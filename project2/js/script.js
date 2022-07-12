@@ -355,9 +355,6 @@ $(document).ready(() => {
                     loadData();
                     resultsBox.pass("Add New Personnel",
                         "new personnel added successfully");
-                    setPeople();
-                    setDepartments();
-                    setLocations();
                 } else {
                     resultsBox.fail("Add New Personnel",
                         "failed to add new personnel");
@@ -428,9 +425,6 @@ $(document).ready(() => {
                     loadData();
                     resultsBox.pass("Update Personnel",
                         "personnel updated successfully");
-                    setPeople();
-                    setDepartments();
-                    setLocations();
                 } else {
                     resultsBox.fail("Update Personnel",
                         "failed to update personnel");
