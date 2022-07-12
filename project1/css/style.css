@@ -122,3 +122,9 @@ justify-content: center;
 align-items: center;
 font-size: 20px;
 }
+
+
+.modal-body{
+  max-height: 70vh;
+  overflow-y: auto;
+}

@@ -1,73 +1,30 @@
 <?php
-
-$people = [
-    [2, 'Kris', 'Kovnot', '', 'kkovnot1@google.nl', 2],
-    [3, 'Vera', 'Kisbee', '', 'vkisbee2@nih.gov', 2],
-    [4, 'Aveline', 'Edgson', '', 'aedgson3@wikispaces.com', 3],
-    [5, 'Bertie', 'Wittke', '', 'bwittke4@yahoo.com', 4],
-    [6, 'Demetre', 'Cossam', '', 'dcossam5@washington.edu', 5],
-    [7, 'Annabela', 'McGavigan', '', 'amcgavigan6@wp.com', 4],
-    [8, 'Crichton', 'McAndrew', '', 'cmcandrew7@zdnet.com', 1],
-    [9, 'Cordula', 'Plain', '', 'cplain8@google.ca', 5],
-    [10, 'Glen', 'McDougle', '', 'gmcdougle9@meetup.com', 6],
-    [11, 'Theo', 'Audas', '', 'taudasa@newsvine.com', 7],
-    [12, 'Spense', 'Jolliss', '', 'sjollissb@wufoo.com', 8],
-    [13, 'Leopold', 'Carl', '', 'lcarlc@paginegialle.it', 9],
-    [14, 'Barr', 'MacAllan', '', 'bmacalland@github.com', 5],
-    [15, 'Suzie', 'Cromer', '', 'scromere@imageshack.us', 1],
-    [16, 'Tracee', 'Gisbourn', '', 'tgisbournf@bloglines.com', 10],
-    [17, 'Taylor', 'St. Quintin', '', 'tstquinting@chronoengine.com', 10],
-    [18, 'Lin', 'Klassmann', '', 'lklassmannh@indiatimes.com', 10],
-    [19, 'Lay', 'Fintoph', '', 'lfintophi@goo.gl', 11],
-    [20, 'Moishe', 'Flinn', '', 'mflinnj@list-manage.com', 12],
-    [21, 'Gay', 'Bickford', '', 'gbickfordk@scientificamerican.com', 6],
-    [22, 'Erik', 'Lindback', '', 'elindbackl@virginia.edu', 8],
-    [23, 'Tamarra', 'Ace', '', 'tacem@vinaora.com', 9],
-    [24, 'Barbara-anne', 'Rooksby', '', 'brooksbyn@issuu.com', 12],
-    [25, 'Lucien', 'Allsup', '', 'lallsupo@goo.ne.jp', 9],
-    [26, 'Jackelyn', 'Imlach', '', 'jimlachp@google.it', 11],
-    [27, 'Virge', 'Bootes', '', 'vbootesq@oracle.com', 2],
-    [28, 'Rafferty', 'Matasov', '', 'rmatasovr@4shared.com', 4],
-    [29, 'Vanya', 'Goulder', '', 'vgoulders@phoca.cz', 9],
-    [30, 'Bonita', 'McGonagle', '', 'bmcgonaglet@microsoft.com', 1],
-    [31, 'Allx', 'Whaley', '', 'awhaleyu@bbb.org', 1],
-    [32, 'Mavis', 'Lernihan', '', 'mlernihanv@netscape.com', 5],
-    [33, 'Vern', 'Durling', '', 'vdurlingw@goo.gl', 1],
-    [34, 'Myles', 'Minchi', '', 'mminchix@smugmug.com', 7],
-    [35, 'Anitra', 'Coleridge', '', 'acoleridgey@nbcnews.com', 6],
-    [36, 'Ailis', 'Brewster', '', 'abrewsterz@businesswire.com', 7],
-    [37, 'Rahal', 'Tute', '', 'rtute10@pinterest.com', 6],
-    [38, 'Warner', 'Blonden', '', 'wblonden11@spiegel.de', 12],
-    [39, 'Melvyn', 'Canner', '', 'mcanner12@eepurl.com', 4],
-    [40, 'Ryann', 'Giampietro', '', 'rgiampietro13@theguardian.com', 4],
-    [41, 'Harwell', 'Jefferys', '', 'hjefferys14@jimdo.com', 10],
-    [42, 'Lanette', 'Buss', '', 'lbuss15@51.la', 4],
-    [43, 'Lissie', 'Reddington', '', 'lreddington16@w3.org', 9],
-    [44, 'Dore', 'Braidford', '', 'dbraidford17@google.com.br', 11],
-    [45, 'Lizabeth', 'Di Franceshci', '', 'ldifranceshci18@mediafire.com', 8],
-    [46, 'Felic', 'Sharland', '', 'fsharland19@myspace.com', 12],
-    [47, 'Duff', 'Quail', '', 'dquail1a@vimeo.com', 9],
-    [48, 'Brendis', 'Shivell', '', 'bshivell1b@un.org', 1],
-    [49, 'Nevile', 'Schimaschke', '', 'nschimaschke1c@hexun.com', 10],
-    [50, 'Jon', 'Calbaithe', '', 'jcalbaithe1d@netvibes.com', 4],
-    [51, 'Emmery', 'Darben', '', 'edarben1e@mapquest.com', 10],
-    [52, 'Staford', 'Whitesel', '', 'swhitesel1f@nasa.gov', 6],
-    [53, 'Benjamin', 'Hawkslee', '', 'bhawkslee1g@hubpages.com', 7],
-    [54, 'Myrle', 'Speer', '', 'mspeer1h@tripod.com', 3],
-    [55, 'Matthus', 'Banfield', '', 'mbanfield1i@angelfire.com', 3],
-    [56, 'Annadiana', 'Drance', '', 'adrance1j@omniture.com', 3],
-    [57, 'Rinaldo', 'Fandrey', '', 'rfandrey1k@bbc.co.uk', 2],
-    [58, 'Roanna', 'Standering', '', 'rstandering1l@cocolog-nifty.com', 3],
-    [59, 'Lorrie', 'Fattorini', '', 'lfattorini1m@geocities.jp', 9],
-    [60, 'Talbot', 'Andrassy', '', 'tandrassy1n@bigcartel.com', 4],
-    [61, 'Cindi', 'O\'Mannion', '', 'comannion1o@ameblo.jp', 11],
-    [62, 'Pancho', 'Mullineux', '', 'pmullineux1p@webmd.com', 1],
-    [63, 'Cynthy', 'Peyntue', '', 'cpeyntue1q@amazon.co.jp', 6]
-
-];
+include "functions.php";
 
 
-$data = [$people,[],[]];
-header('Content-Type: application/json; charset=UTF-8');
-echo '{"status": "ok", "data": '. json_encode($data). '}';
+$locations = [];
+$q = mysqli_query($conn, "SELECT * FROM location");
+while($r = mysqli_fetch_assoc($q)){
+array_push($locations, [$r['id'], $r['name']]);
+}
+
+$departments = [];
+$q = mysqli_query($conn, "SELECT * FROM department");
+while($r = mysqli_fetch_assoc($q)){
+array_push($departments, [$r['id'], $r['name'], $r['locationID']]);
+}
+
+
+$people = [];
+	$queryFetch = $conn->prepare("SELECT personnel.* , department.locationID as locationID FROM `personnel` INNER JOIN department ON personnel.departmentID = department.id;");
+	$queryFetch->execute();
+	$queryFetch->bind_result($personnelId, $personnelfname, $personnellname, $personneljobtitle, $personnelemail, $departmentID, $locationID);
+
+    while($r = mysqli_stmt_fetch($queryFetch)){
+    array_push($people, [$personnelId, $personnelfname, $personnellname, $personneljobtitle, $personnelemail, $departmentID, $locationID]);
+}
+
+$data = [$people, $locations, $departments];
+
+    return_success($data);
 ?>

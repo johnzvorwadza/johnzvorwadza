@@ -1,340 +1,285 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="bootstrap-4.0.0/css/bootstrap.min.css">
-       
-        <link type="text/css" rel="stylesheet" href="css/style.css">
-        <style>
-            *{
-    position: relative;
-}
-body, html{
-    padding:0;
-    margin:0;
-    line-height: 25px;
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-    
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="favicon_io/site.webmanifest">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap-4.0.0/css/bootstrap.min.css">
+    <link href="fontawesome/css/all.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <title>Company Directory</title>
+</head>
 
-}
+<body>
 
+    <div class="nav">
+        <button class="btn btn-secondary" id="goToPeople">people</button>
+        <button class="btn btn-secondary" id="goToDepartments">departments</button>
+        <button class="btn btn-secondary" id="goToLocations">locations</button>
+        <i data-toggle="modal" data-target="#openAdd" class="fa-solid fa-circle-plus"></i>
+    </div>
 
-
-.nav{
-position: sticky;
-position: -webkit-sticky;
-top:0;
-display: flex;
-align-items: center;
-gap: 10px;
-background-color: rgba(9,9,121,1);
-color: white;
-padding: 10px;
-height: 50px;
-z-index: 9;
-
-}
-
-
-
-.row{
-    margin: auto;
-    margin-top: 10px;
-    border-radius: 10px;
-    box-sizing: border-box;
-    background-color: white;
-    color: #333;
-    padding: 10px;
-    width: calc(100% - 22px);
-    display: flex;
-    flex-direction: column;
-
-}
-
-.titleRow{
-    font-weight: bold;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 50px;
-    background: rgb(2,0,36);
-    color: white;
-    z-index: 2;
-}
-
-
-
-
-
-
-
-.closeBtn{
-    position: absolute; 
-    top: 5px;
-    right: 5px;
-    border-radius: 10px;
-    background-color: rgb(109, 7, 7);
-    color: white;
-    font-weight: bold;
-    border: 0;
-    padding: 5px;
-    
-}
-.closeBtn:hover{
-    background: red;
-}
-
-
-.filter{
-    font-weight: bold;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 59px;
-    background: rgb(2,0,36);
-    color: white;
-    z-index: 2;
-}
-.filter div{
-padding: 10px;
-display: flex;
-justify-content: space-evenly;
-}
-.filter input{
-    margin: 10px;
-    width: calc(100% - 20px);
-}
-
-
-.modal-body{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-select{
-    background-color: #000;
-    color: white;
-    text-align: center;
-    padding: 5px;
-    border-radius: 10px;
-}
-
-        </style>
-        <title>Company Directory</title>
-    </head>
-    <body>
-        
-        <div class="nav">
-            <span>Company Directory</span>
-            <button 
-            type="button"
-            class="btn btn-info btn-sm" 
-            data-toggle="modal" 
-            data-target="#addEmployeeModal">Add New Employee</button>
-
-            <button 
-            type="button"
-            class="btn btn-info btn-sm" 
-            data-toggle="modal" 
-            data-target="#addLocationModal">Add New Location</button>
-
-            <button 
-            type="button"
-            class="btn btn-info btn-sm" 
-            data-toggle="modal" 
-            data-target="#addDepartmentModal">Add New Department</button>
-        </div>
-
-        <div class="titleRow filter"> 
-            <input id="search" type="text" placeholder="search"/>
+    <div id="people">
+        <div class="filter">
+            <input id="search" type="text" placeholder="search" />
             <div>
-                <select id="department">
+                <select class="departmentsSelect" id="department">
                     <option value="">All Department</option>
                 </select>
 
-                <select id="location">
+                <select class="locationsSelect" id="location">
                     <option value="">All Locations</option>
-                    <option value="2">Location 2</option>
-                    <option value="3">Location 3</option>
                 </select>
+            </div>
+        </div>
+
+        <div id="results"></div>
+
+    </div>
+
+    <div id="resultsLocations"></div>
+    <div id="resultsDepartments"></div>
+
+    <!--Overlay Modals-->
+    <!--Start of Personnel Modals-->
+
+    <!--Add New Personnel-->
+    <div class="modal fade" id="addEmployeeModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input id="firstNameInput" type="text" placeholder="First Name" />
+                    <input id="lastNameInput" type="text" placeholder="Last Name" />
+                    <input id="jobTitleInput" type="text" placeholder="Job Title" />
+                    <input id="emailInput" type="text" placeholder="email" />
+                    <select id="addNameSelectDepartment" class="departmentsSelect">
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button id="addName" class="btn btn-info btn-lg">submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Update Personnel-->
+    <div class="modal fade" id="updateEmployeeModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input id="firstNameInputUpdate" type="text" placeholder="First Name" />
+                    <input id="lastNameInputUpdate" type="text" placeholder="Last Name" />
+                    <input id="jobTitleInputUpdate" type="text" placeholder="Job Title" />
+                    <input id="emailInputUpdate" type="text" placeholder="email" />
+                    <select id="updateNameSelectDepartment" class="departmentsSelect">
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button id="updateName" class="btn btn-info btn-lg">update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End of Personnel Modals-->
+
+
+    <!--Start of Department Modals-->
+
+    <!--Add New Location Modal-->
+    <div class="modal fade" id="addDepartmentModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Department</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input id="departmentInput" type="text" placeholder="department..." />
+                    <select id="departmentLocationIdSelect" class="locationsSelect">
+                        <option disabled="true" selected="true" value="">Select Location</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button id="addDepartment" class="btn btn-info btn-lg">submit</button>
+                </div>
             </div>
 
         </div>
-        
-        <div id="results"></div>
+    </div>
 
 
+    <!--Update Location Modal-->
+    <div class="modal fade" id="updateDepartmentModal" role="dialog">
+        <div class="modal-dialog">
 
-        <!--Overlay Modals-->
-
-        <div class="modal fade" id="addEmployeeModal" role="dialog">
-            <div class="modal-dialog">
-            
-              <!-- Modal content-->
-              <div class="modal-content">
+            <!-- Modal content-->
+            <div class="modal-content">
                 <div class="modal-header">
-                  <h4 class="modal-title">Add New Employee</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Department</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                <input type="text" placeholder="First Name"/>
-                <input type="text" placeholder="Last Name"/>
-                <input type="text" placeholder="Role"/>
-                <select>
-                    <option disabled="true" selected="true" value="">Select Department</option>
-                    <option>Customer Service</option>
-                    <option>Sales</option>
-                    <option>Admin</option>
-                </select>
-                <select>
-                    <option disabled="true" selected="true" value="">Select Location</option>
-                    <option>London</option>
-                    <option>Paris</option>
-                    <option>Harare</option>
-                </select>
-                <button class="btn btn-info btn-lg">submit</button>
-
-
+                    <input id="departmentInputUpdate" type="text" placeholder="department..." />
+                    <select id="departmentLocationIdSelectUpdate" class="locationsSelect">
+                    </select>
                 </div>
                 <div class="modal-footer">
+                    <button id="updateDepartment" class="btn btn-info btn-lg">update</button>
                 </div>
-              </div>
-              
             </div>
-          </div>
+
+        </div>
+    </div>
 
 
-          <div class="modal fade" id="addDepartmentModal" role="dialog">
-            <div class="modal-dialog">
-            
-              <!-- Modal content-->
-              <div class="modal-content">
+    <!--End of Department Modals-->
+
+
+
+    <!--Start of Location Modals-->
+
+    <!--Add New Location Modal-->
+    <div class="modal fade" id="addLocationModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
                 <div class="modal-header">
-                  <h4 class="modal-title">Add New Department</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Location</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" placeholder="Name"/>
-                    <button class="btn btn-info btn-lg">submit</button>
+                    <input id="locationInput" type="text" placeholder="location..." />
                 </div>
                 <div class="modal-footer">
+                    <button id="addLocation" class="btn btn-info btn-lg">submit</button>
                 </div>
-              </div>
-              
             </div>
-          </div>
 
+        </div>
+    </div>
 
-          <div class="modal fade" id="addLocationModal" role="dialog">
-            <div class="modal-dialog">
-            
-              <!-- Modal content-->
-              <div class="modal-content">
+    <!--Update Location Modal-->
+    <div class="modal fade" id="updateLocationModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
                 <div class="modal-header">
-                  <h4 class="modal-title">Add New Location</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Location</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" placeholder="Name"/>
-                    <button class="btn btn-info btn-lg">submit</button>
+                    <input id="locationInputUpdate" type="text" placeholder="location..." />
                 </div>
                 <div class="modal-footer">
+                    <button id="updateLocation" class="btn btn-info btn-lg">update</button>
                 </div>
-              </div>
-              
             </div>
-          </div>
 
+        </div>
+    </div>
 
-           
-        
-        <script src="js/jquery.js"></script>
-        <script src="js/script.js"></script>
-        <script>
-
-                $(document).ready(()=>{
+    <!--end of Location Modals-->
 
 
 
-const data = {people:[],locations:[]};
+    <div class="modal fade" id="openAdd" role="dialog">
+        <div class="modal-dialog">
 
-let people = [];
-const setPeople=()=>{
-    $("#results").html("");
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
 
+                    <button type="button" class="addNewBtn btn btn-info btn-sm" data-toggle="modal"
+                        data-target="#addEmployeeModal">Add New Employee</button>
 
-    let peopleToShow = people;
-    if($("#location").val() !== ""){
-        peopleToShow = peopleToShow.filter(person=> person[5] == $("#location").val());
-    }
+                    <button type="button" class="addNewBtn btn btn-info btn-sm" data-toggle="modal"
+                        data-target="#addLocationModal">Add New Location</button>
 
-    peopleToShow.forEach(person=>{
-        $("#results").append(`
-        <div class="row">
-            <div><h3>${person[1]} ${person[2]}</h3></div>
-            <div><b>Email:</b> ${person[4]}</div>
-            <div><b>Location:</b> Location ${person[5]}</div>
-        </div>`);
+                    <button type="button" class="addNewBtn btn btn-info btn-sm" data-toggle="modal"
+                        data-target="#addDepartmentModal">Add New Department</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">close</button>
+                </div>
+            </div>
 
-
-
-});
-
- 
-
-    
-    
-}
-
-$.ajax({
-    url: "php/loaddata.php"
-    ,type: "GET"
-    ,dataType: "json"
-    ,success: (results)=>{
-        data.people = results.data[0];
-        data.departments = results.data[1];
-        data.locations = results.data[2];
-
-        people = data.people;
-        setPeople();
-        
-    }
-    ,error: (err, status, type)=>{
-        alert("error");
-
-    }
-});
+        </div>
+    </div>
 
 
-$("#search").on("keyup",()=>{
+    <div class="modal fade" id="confirmDelete" role="dialog">
+        <div class="modal-dialog">
 
-    var searchList = data.people.filter(person=> 
-    person[1].toLowerCase().includes($("#search").val().toLowerCase()) 
-    || person[2].toLowerCase().includes($("#search").val().toLowerCase()));
-    people = searchList;
-    setPeople();
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">DELETE</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this <span class="deleteType"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDeleteBtn" type="button" data-dismiss="modal"
+                        class="btn btn-primary">confirm</button>
+                </div>
+            </div>
 
-});
-
-$("#location").on("change", ()=>{
-    setPeople(); 
-});
-
-$("#department").on("change", ()=>{
-    setPeople(); 
-});
-
-
-});
-            
-        </script>
+        </div>
+    </div>
 
 
-<script src="js/jquery.js"></script>
-<script src="js/script.js"></script>
+    <div class="modal fade" id="resultsBox" role="dialog">
+        <div class="modal-dialog">
 
-<script src="js/popper.js"></script>
-<script src="bootstrap-4.0.0/js/bootstrap.min.js"></script>
-    </body>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="success"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="loading">
+        <img src="src/loading.gif" />
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="bootstrap-4.0.0/js/bootstrap.min.js"></script>
+</body>
+
 </html>
