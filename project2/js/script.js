@@ -116,7 +116,10 @@ const setDepartments = () => {
     data.departments.forEach(department => {
         let loc = data.locations.filter(location => location[0] == department[2])[0];
 
-        const numPeople = data.people.filter(p => p[5] === department[0]).length;
+        
+        
+        let numPeople = data.people.filter(p => p[5] == department[0]).length;
+        
         $(".departmentsSelect").append(
             `<option class="depoption" value="${department[0]}">${department[1]}</option>`);
 
@@ -222,25 +225,8 @@ function confirmDelete() {
         success: results => {
 
             if (results.status.name === "ok") {
-                resultsBox.pass("Delete", "deleted succesfully")
-
-                if (deleteType === 0) {
-                    data.people = data.people.filter(p => p[0] !== pId);
-                    people = data.people;
-                    setLocations();
-                    setDepartments();
-                    setPeople();
-
-                } else if (deleteType === 1) {
-                    data.locations = data.locations.filter(l => l[0] !== pId);
-                    setLocations();
-
-                } else if (deleteType === 2) {
-                    data.departments = data.departments.filter(d => d[0] !== pId);
-                    setDepartments();
-                    setLocations();
-
-                }
+                resultsBox.pass("Delete", "deleted succesfully");
+                loadData();
 
             } else {
                 resultsBox.fail("Delete", "failed to delete : " + results.status.description);
@@ -256,14 +242,8 @@ function confirmDelete() {
 
 }
 
-
-
-
-
-$(document).ready(() => {
-
-
-
+function loadData(){
+    loading.start();
     $.ajax({
         url: "php/loaddata.php",
         type: "GET",
@@ -285,10 +265,19 @@ $(document).ready(() => {
         },
         error: (err, status, type) => {
             alert("error");
+            loading.end();
 
         }
     });
 
+}
+
+
+
+
+$(document).ready(() => {
+
+    loadData();
 
     $("#search").on("keyup", () => {
 
@@ -363,7 +352,7 @@ $(document).ready(() => {
             success: results => {
                 loading.end();
                 if (results.status.name === "ok") {
-                    data.people.push(results.data[0]);
+                    loadData();
                     resultsBox.pass("Add New Personnel",
                         "new personnel added successfully");
                     setPeople();
@@ -436,11 +425,7 @@ $(document).ready(() => {
             success: results => {
                 loading.end();
                 if (results.status.name === "ok") {
-                    data.people.map((p, i) => {
-                        if (p[0] === pId) {
-                            data.people[i] = results.data[0];
-                        }
-                    });
+                    loadData();
                     resultsBox.pass("Update Personnel",
                         "personnel updated successfully");
                     setPeople();
@@ -484,7 +469,7 @@ $(document).ready(() => {
                 $("#locationInput").val("");
                 $('.modal').modal('hide');
                 if (results.status.name === "ok") {
-                    data.locations.push(results.data[0]);
+                    loadData();
                     resultsBox.pass("Add New Location",
                         "new location added successfully");
                     setLocations();
@@ -525,11 +510,7 @@ $(document).ready(() => {
             success: results => {
                 $("#locationInput").val("");
                 if (results.status.name === "ok") {
-                    data.locations.map((l, i) => {
-                        if (l[0] === pId) {
-                            data.locations[i] = results.data[0];
-                        }
-                    });
+                    loadData();
                     resultsBox.pass("Update Location",
                         "location updated successfully");
                     setLocations();
@@ -577,9 +558,8 @@ $(document).ready(() => {
             success: results => {
                 $("#departmentInput").val("");
 
-                if (results.status.name === "ok") {
-                    data.departments.push(results.data[0]);
-                    setDepartments();
+                if (results.status.name === "ok") { 
+                    loadData();
                     resultsBox.pass("Add New Department",
                         "new department added succesfully");
                 } else {
@@ -625,20 +605,13 @@ $(document).ready(() => {
                 $("#departmentInput").val("");
 
                 if (results.status.name === "ok") {
-                    data.departments.map((d, i) => {
-                        if (d[0] === pId) {
-                            data.departments[i] = results.data[0];
-                        }
-                    });
-
-                    setDepartments();
+                    loadData();
                     resultsBox.pass("Update Department",
                         "department updated succesfully");
                 } else {
                     resultsBox.fail("Update Department",
                         "failed to update department");
                 }
-
                 loading.end();
             },
             error: (error, status, errorType) => {
