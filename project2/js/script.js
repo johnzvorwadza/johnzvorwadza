@@ -61,9 +61,9 @@ const setPeople = () => {
         }
 
 
-        $("#results").append(`
+        /*$("#results").append(`
 <div class="row">
-    <div class="resultsName"><h3><i class="fa-solid fa-person"></i> <span>${person[1]} ${person[2]}</span></h3></div>
+    <div class="resultsName"><h3><i class="fa-solid fa-person"></i> <span>${person[2]}, ${person[1]}</span></h3></div>
     <div class="rowDetails"><i class="fa-solid fa-envelope"></i> <span>${person[4]}</span></div>
     <div class="rowDetails"><i class="fa-solid fa-book"></i> <span></span>${dept[1]}</div>
     <div class="rowDetails"><i class="fa-solid fa-location-crosshairs"></i> <span>${loc[1]}</span></div>
@@ -71,7 +71,28 @@ const setPeople = () => {
         <i id="${person[0]}" class="fa-solid fa-pen-to-square editPersonnelIcon"></i>
         <i id="${person[0]}" class="fa-solid fa-trash-can deleteIcon"></i>
         </div>
-</div>`);
+</div>`);*/
+
+$("#results").append(`
+        <div class="col-12 col-md-6 col-lg-4">
+        <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"><i class="fa-solid fa-person"></i> <span>${person[2]}, ${person[1]}</span></h5>
+            <p class="card-text">
+            <div class="rowDetails"><i class="fa-solid fa-envelope"></i> <span>${person[4]}</span></div>
+    <div class="rowDetails"><i class="fa-solid fa-book"></i> <span></span>${dept[1]}</div>
+    <div class="rowDetails"><i class="fa-solid fa-location-crosshairs"></i> <span>${loc[1]}</span></div>
+    <div class="rowDetails delete-edit-cont">
+        <i id="${person[0]}" class="fa-solid fa-pen-to-square editPersonnelIcon"></i>
+        <i id="${person[0]}" class="fa-solid fa-trash-can deleteIcon"></i>
+        </div>
+
+            </p>
+        </div>
+    </div>
+            </div>
+        </div>
+`);
 
 
 
@@ -81,30 +102,38 @@ const setPeople = () => {
         //.attr("employee")
         pId = e.target.id;
         deleteType = 0;
-        $(".deleteType").html("employee");
-        $("#confirmDelete").modal("show");
+        loading.start();
+    $.ajax({
+        url: "php/person/getPersonnelById.php",
+        type: "GET",
+        data: {
+            id: pId
+        },
+        dataType: "json",
+        success: (results) => {
+            if (results.status.name === "ok") {
+                $(".deleteType").html(`employee : <b>${results.data[0][2]}, ${results.data[0][1]}</b>`);
+                $("#confirmDelete").modal("show");
+                
+                loading.end();
+            } else {
+                resultsBox.fail("Error", "Sorry, failed to processs your request");
+                loading.end();
+            }
+
+
+        },
+        error: (err, status, type) => {
+            resultsBox.fail("Error", "Sorry, failed to processs your request");
+            loading.end();
+        }
+    });
+
     });
 
     $(".editPersonnelIcon").on("click", e => {
         pId = e.target.id;
-        //$("#locationInputUpdate").val(data.locations.filter(l=>l[0]==pId)[0][1]);
-        $("#firstNameInputUpdate").val(data.people.filter(p => p[0] == pId)[0][1]);
-        $("#lastNameInputUpdate").val(data.people.filter(p => p[0] == pId)[0][2]);
-        $("#jobTitleInputUpdate").val(data.people.filter(p => p[0] == pId)[0][3]);
-        $("#emailInputUpdate").val(data.people.filter(p => p[0] == pId)[0][4]);
-        $("#updateNameSelectDepartment").html("");
-        data.departments.forEach(d => {
-            if (d[0] === data.people.filter(p => p[0] == pId)[0][5]) {
-                $("#updateNameSelectDepartment").append(
-                    `<option selected="true" value="${d[0]}">${d[1]}</option>`);
-            } else {
-                $("#updateNameSelectDepartment").append(
-                    `<option  value="${d[0]}">${d[1]}</option>`);
-            }
-
-        });
-
-        $("#updateEmployeeModal").modal("show");
+        setDataEditPersonnel();
     });
 
 }
@@ -116,46 +145,76 @@ const setDepartments = () => {
     data.departments.forEach(department => {
         let loc = data.locations.filter(location => location[0] == department[2])[0];
 
-        
-        
+
+
         let numPeople = data.people.filter(p => p[5] == department[0]).length;
-        
+
         $(".departmentsSelect").append(
             `<option class="depoption" value="${department[0]}">${department[1]}</option>`);
 
-        $("#resultsDepartments").append(`
-<div class="row">
-    <div class="resultsName"><h3><i class="fa-solid fa-book"></i> <span>${department[1]}</span></h3></div>
-    <div class="rowDetails"><i class="fa-solid fa-people-group"></i> <span>${numPeople}</span></div>
+$("#resultsDepartments").append(`
+        <div class="col-12 col-md-6 col-lg-4">
+        <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"><i class="fa-solid fa-book"></i> <span>${department[1]}</span></h5>
+            <p class="card-text">
+
+            <div class="rowDetails"><i class="fa-solid fa-people-group"></i> <span>${numPeople}</span></div>
     <div class="rowDetails"><i class="fa-solid fa-location-crosshairs"></i> <span>${loc[1]}</span></div>
-    <div class="rowDetails delete-edit-cont">
+    <div class="delete-edit-cont">
         <i id="${department[0]}" class="fa-solid fa-pen-to-square editDepartmentIcon"></i>
         <i id="${department[0]}" class="fa-solid fa-trash-can deleteDepartmentIcon"></i>
         </div>
-</div>`);
+            
+            </p>
+        </div>
+    </div>
+            </div>
+        </div>
+`);
+
+
+
     });
     $(".deleteDepartmentIcon").on("click", e => {
         pId = e.target.id;
         deleteType = 2;
-        $(".deleteType").html("department");
-        $("#confirmDelete").modal("show");
+        loading.start();
+        $.ajax({
+            url: "php/department/getDepartmentById.php",
+            type: "GET",
+            data: {
+                id: pId
+            },
+            dataType: "json",
+            success: (results) => {
+                if (results.status.name === "ok" && results.count < 1) {
+                    $(".deleteType").html(`department : <b>${results.data[0][1]}</b>`);
+                    $("#confirmDelete").modal("show");
+                    loading.end();
+                }else if(results.status.name === "ok" && results.count > 0){
+                    resultsBox.fail("Delete Department", `Sorry, failed to delete: ${results.count} personnels are using this department`);
+                    loading.end();
+
+                }
+                
+                else {
+                    resultsBox.fail("Error", "Sorry, failed to delete department");
+                    loading.end();
+                }
+    
+    
+            },
+            error: (err, status, type) => {
+                resultsBox.fail("Error", "Sorry, failed to processs your request");
+                loading.end();
+            }
+        });
     });
 
     $(".editDepartmentIcon").on("click", e => {
         pId = e.target.id;
-        $("#departmentInputUpdate").val(data.departments.filter(d => d[0] == pId)[0][1]);
-        $("#departmentLocationIdSelectUpdate").html("");
-        data.locations.forEach(l => {
-            if (l[0] === data.departments.filter(d => d[0] == pId)[0][2]) {
-                $(".locationsSelect").append(
-                    `<option selected="true" value="${l[0]}">${l[1]}</option>`);
-            } else {
-                $(".locationsSelect").append(`<option  value="${l[0]}">${l[1]}</option>`);
-            }
-
-        });
-
-        $("#updateDepartmentModal").modal("show");
+        setDataEditDepartment();
 
 
     });
@@ -169,34 +228,182 @@ const setLocations = () => {
         $(".locationsSelect").append(
             `<option class="locoption" value="${location[0]}">${location[1]}</option>`);
 
-        $("#resultsLocations").append(`
-<div class="row">
-    <div class="resultsName"><h3><i class="fa-solid fa-location-crosshairs"></i> <span>${location[1]}</span></h3></div>
-    <div class="rowDetails"><i class="fa-solid fa-book"></i> <span>${numDepartments}</span></div>
+$("#resultsLocations").append(`
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-location-crosshairs"></i> <span>${location[1]}</span></h5>
+                    <p class="card-text">
+                    <div class="rowDetails"><i class="fa-solid fa-book"></i> <span>${numDepartments}</span></div>
     <div class="rowDetails delete-edit-cont">
         <i id="${location[0]}" class="fa-solid fa-pen-to-square editLocationIcon"></i>
         <i id="${location[0]}" class="fa-solid fa-trash-can deleteLocationIcon"></i>
         </div>
-</div>`);
+                    
+                    </p>
+                </div>
+            </div>
+        </div>
+
+`);
+
+
+
     });
 
     $(".deleteLocationIcon").on("click", e => {
         pId = e.target.id;
-        deleteType = 1;
-        $(".deleteType").html("location");
-        $("#confirmDelete").modal("show");
+        deleteType = 1;loading.start();
+        $.ajax({
+            url: "php/location/getLocationById.php",
+            type: "GET",
+            data: {
+                id: pId
+            },
+            dataType: "json",
+            success: (results) => {
+                if (results.status.name === "ok" && results.count < 1) {
+                    $(".deleteType").html(`location : <b>${results.data[0][1]}</b>`);
+                    $("#confirmDelete").modal("show");
+                    loading.end();
+                }else if(results.status.name === "ok" && results.count > 0){
+                    resultsBox.fail("Delete Location", `Sorry, failed to delete: ${results.count} departments are using this department`);
+                    loading.end();
 
+                }
+                
+                else {
+                    resultsBox.fail("Error", "Sorry, failed to delete department");
+                    loading.end();
+                }
+    
+    
+            },
+            error: (err, status, type) => {
+                resultsBox.fail("Error", "Sorry, failed to processs your request");
+                loading.end();
+            }
+        });
 
     });
 
     $(".editLocationIcon").on("click", e => {
         pId = e.target.id;
-        deleteType = 1;
-        $("#locationInputUpdate").val(data.locations.filter(l => l[0] == pId)[0][1]);
-        $("#updateLocationModal").modal("show");
+        setDataEditLocation();
     });
 
 
+}
+
+
+function setDataEditPersonnel() {
+    loading.start();
+    $.ajax({
+        url: "php/person/getPersonnelById.php",
+        type: "GET",
+        data: {
+            id: pId
+        },
+        dataType: "json",
+        success: (results) => {
+            if (results.status.name === "ok") {
+                $("#firstNameInputUpdate").val(results.data[0][1]);
+                $("#lastNameInputUpdate").val(results.data[0][2]);
+                $("#jobTitleInputUpdate").val(results.data[0][3]);
+                $("#emailInputUpdate").val(results.data[0][4]);
+                $("#updateNameSelectDepartment").html("");
+                results.departments.forEach(d => {
+                    if (d[0] === results.data[0][5]) {
+                        $("#updateNameSelectDepartment").append(
+                            `<option selected="true" value="${d[0]}">${d[1]}</option>`);
+                    } else {
+                        $("#updateNameSelectDepartment").append(
+                            `<option  value="${d[0]}">${d[1]}</option>`);
+                    }
+
+                });
+
+                $("#updateEmployeeModal").modal("show");
+                loading.end();
+            } else {
+                resultsBox.fail("Error", "Sorry, failed to processs your request");
+                loading.end();
+            }
+
+
+        },
+        error: (err, status, type) => {
+            resultsBox.fail("Error", "Sorry, failed to processs your request");
+            loading.end();
+        }
+    });
+}
+
+function setDataEditDepartment() {
+    loading.start();
+    $.ajax({
+        url: "php/department/getDepartmentById.php",
+        type: "GET",
+        data: {
+            id: pId
+        },
+        dataType: "json",
+        success: (results) => {
+            if (results.status.name === "ok") {
+                $("#departmentInputUpdate").val(results.data[0][1]);
+                $("#departmentLocationIdSelectUpdate").html("");
+                results.locations.forEach(l => {
+                    if (l[0] === results.data[0][2]) {
+                        $(".locationsSelect").append(
+                            `<option selected="true" value="${l[0]}">${l[1]}</option>`);
+                    } else {
+                        $(".locationsSelect").append(`<option  value="${l[0]}">${l[1]}</option>`);
+                    }
+
+                });
+
+                $("#updateDepartmentModal").modal("show");
+                loading.end();
+            } else {
+                resultsBox.fail("Error", "Sorry, failed to processs your request");
+                loading.end();
+            }
+
+
+        },
+        error: (err, status, type) => {
+            resultsBox.fail("Error", "Sorry, failed to processs your request");
+            loading.end();
+        }
+    });
+}
+
+function setDataEditLocation() {
+    loading.start();
+    $.ajax({
+        url: "php/location/getLocationById.php",
+        type: "GET",
+        data: {
+            id: pId
+        },
+        dataType: "json",
+        success: (results) => {
+            if (results.status.name === "ok") {
+                $("#locationInputUpdate").val(results.data[0][1]);
+                $("#updateLocationModal").modal("show");
+                loading.end();
+            } else {
+                resultsBox.fail("Error", "Sorry, failed to processs your request");
+                loading.end();
+            }
+
+
+        },
+        error: (err, status, type) => {
+            resultsBox.fail("Error", "Sorry, failed to processs your request");
+            loading.end();
+        }
+    });
 }
 
 
@@ -242,7 +449,7 @@ function confirmDelete() {
 
 }
 
-function loadData(){
+function loadData() {
     loading.start();
     $.ajax({
         url: "php/loaddata.php",
@@ -301,35 +508,16 @@ $(document).ready(() => {
     ////////// ADD / UPDATE Personnel ///////////
 
     /////Add New Personnel
-    $("#addName").on("click", () => {
-        if ($("#firstNameInput").val() === "") {
-            resultsBox.fail("Add New Employee",
-                "First Name Can Not be Empty");
-            return;
-        }
-        if ($("#lastNameInput").val() === "") {
-            resultsBox.fail("Add New Employee",
-                "Last Name Can Not be Empty");
-            return;
-        }
-        if ($("#jobTitleInput").val() === "") {
-            resultsBox.fail("Add New Employee",
-                "Job Title Can Not be Empty");
-            return;
-        }
-        if ($("#emailInput").val() === "") {
-            resultsBox.fail("Add New Employee",
-                "Email Can Not be Empty");
-            return;
-        }
-        if ($("#addNameSelectDepartment").val() === "") {
-            resultsBox.fail("Add New Employee",
-                "Select Department");
-            return;
-        }
+
+
+
+    //////
+    $("#addNameForm").on("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (!$("#emailInput").val().match(mailformat)) {
-            resultsBox.fail("Add New Employee",
+        if (!$("#emailInputUpdate").val().match(mailformat)) {
+            resultsBox.fail("Update Employee",
                 "Invalid email");
             return;
 
@@ -370,32 +558,9 @@ $(document).ready(() => {
 
 
     /////Update Personnel
-    $("#updateName").on("click", () => {
-        if ($("#firstNameInputUpdate").val() === "") {
-            resultsBox.fail("Update Employee",
-                "First Name Can Not be Empty");
-            return;
-        }
-        if ($("#lastNameInputUpdate").val() === "") {
-            resultsBox.fail("Update Employee",
-                "Last Name Can Not be Empty");
-            return;
-        }
-        if ($("#jobTitleInputUpdate").val() === "") {
-            resultsBox.fail("Update Employee",
-                "Job Title Can Not be Empty");
-            return;
-        }
-        if ($("#emailInputUpdate").val() === "") {
-            resultsBox.fail("Update Employee",
-                "Email Can Not be Empty");
-            return;
-        }
-        if ($("#updateNameSelectDepartment").val() === "") {
-            resultsBox.fail("Update Employee",
-                "Select Department");
-            return;
-        }
+    $("#updateNameForm").on("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (!$("#emailInputUpdate").val().match(mailformat)) {
             resultsBox.fail("Update Employee",
@@ -443,13 +608,9 @@ $(document).ready(() => {
     ////////// ADD / UPDATE LOCATION ///////////
 
     ///Add new Location
-    $("#addLocation").on("click", () => {
-        if ($("#locationInput").val() === "") {
-            resultsBox.fail("Add New Location",
-                "Location Name Can Not be Empty");
-            return;
-
-        }
+    $("#addLocationForm").on("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
         $('.modal').modal('hide');
         loading.start();
         $.ajax({
@@ -484,13 +645,9 @@ $(document).ready(() => {
 
 
     /////updateLocation
-    $("#updateLocation").on("click", () => {
-        if ($("#locationInputUpdate").val() === "") {
-            resultsBox.fail("Add New Location",
-               "Location Name Can Not be Empty");
-            return;
-
-        }
+    $("#updateLocationForm").on("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
         $('.modal').modal('hide');
         loading.start();
         $.ajax({
@@ -528,17 +685,9 @@ $(document).ready(() => {
     ////////// ADD / UPDATE DEPARTMENT ///////////
 
     ///Add new Department
-    $("#addDepartment").on("click", () => {
-        if ($("#departmentLocationIdSelect").val() === "") {
-            resultsBox.fail("Add New Department",
-                "Department Name Can Not be Empty");
-            return;
-        }
-        if ($("#departmentLocationIdSelect").val() === "") {
-            resultsBox.fail("Update Department",
-                "Select Location");
-            return;
-        }
+    $("#addDepartmentForm").on("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
         loading.start();
         $('.modal').modal('hide');
         $.ajax({
@@ -552,7 +701,7 @@ $(document).ready(() => {
             success: results => {
                 $("#departmentInput").val("");
 
-                if (results.status.name === "ok") { 
+                if (results.status.name === "ok") {
                     loadData();
                     resultsBox.pass("Add New Department",
                         "new department added succesfully");
@@ -573,17 +722,9 @@ $(document).ready(() => {
     });
 
     ///Update Department
-    $("#updateDepartment").on("click", () => {
-        if ($("#departmentInputUpdate").val() === "") {
-            resultsBox.fail("Add New Department",
-                "Department Name Can Not be Empty");
-            return;
-        }
-        if ($("#departmentLocationIdSelectUpdate").val() === "") {
-            resultsBox.fail("Update Department",
-                "Select Location");
-            return;
-        }
+    $("#updateDepartmentForm").on("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
         loading.start();
         $('.modal').modal('hide');
         $.ajax({
@@ -621,14 +762,28 @@ $(document).ready(() => {
 
 
 
-    $(".addNewBtn").on("click", () => {
-        $("#openAdd").modal('hide');
+    let currentPage = 0;
+    $("#openAdd").on("click", () => {
+        if (currentPage === 0) {
+            $("#addEmployeeModal").modal('show');
+        } else if (currentPage === 1) {
+            $("#addDepartmentModal").modal('show');
+        } else if (currentPage === 2) {
+            $("#addLocationModal").modal('show');
+        }
+
     });
+
+
     $("#confirmDeleteBtn").on("click", () => {
         confirmDelete();
     })
 
     $("#goToPeople").on("click", () => {
+        $("#goToDepartments").css("background", "gray");
+        $("#goToLocations").css("background", "gray");
+        $("#goToPeople").css("background", "black");
+        currentPage = 0;
         $("#people").show();
         $("#resultsDepartments").hide();
         $("#resultsLocations").hide();
@@ -636,6 +791,10 @@ $(document).ready(() => {
 
     });
     $("#goToLocations").on("click", () => {
+        $("#goToPeople").css("background", "gray");
+        $("#goToDepartments").css("background", "gray");
+        $("#goToLocations").css("background", "black");
+        currentPage = 2;
         $("#people").hide();
         $("#resultsDepartments").hide();
         $("#resultsLocations").show();
@@ -643,6 +802,10 @@ $(document).ready(() => {
 
     });
     $("#goToDepartments").on("click", () => {
+        $("#goToPeople").css("background", "gray");
+        $("#goToLocations").css("background", "gray");
+        $("#goToDepartments").css("background", "black");
+        currentPage = 1;
         $("#people").hide();
         $("#resultsDepartments").show();
         $("#resultsLocations").hide();
@@ -650,6 +813,10 @@ $(document).ready(() => {
 
     });
 
+
+    $("#goToDepartments").css("background", "gray");
+    $("#goToLocations").css("background", "gray");
+    $("#goToPeople").css("background", "black");
 
     $("#people").show();
     $("#resultsDepartments").hide();
